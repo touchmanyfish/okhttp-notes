@@ -22,7 +22,7 @@
 
 $$I = enabledProtocols \cap tlsVersionsAsString$$
 
-$$signalCond = (isFallback = \text{true}) \land (\text{TLS\_FALLBACK\_SCSV} \in supportedCipherSuites)$$
+$$signalCond = (isFallback = \text{true}) \land (\text{TLS_FALLBACK_SCSV} \in supportedCipherSuites)$$
 
 **[配置的交集]**
 
@@ -31,7 +31,7 @@ $$\mathit{resultIsTls} = isTls$$
 
 $$\mathit{resultTlsVersions} = I$$
 
-$$\mathit{resultCipherSuites} = \begin{cases} (enabledCipherSuites \cap cipherSuitesAsString) \cup \{\text{TLS\_FALLBACK\_SCSV}\}, & \text{当 } signalCond \text{ 成立} \\ enabledCipherSuites \cap cipherSuitesAsString, & \text{其他情况} \end{cases}$$
+$$\mathit{resultCipherSuites} = \begin{cases} (enabledCipherSuites \cap cipherSuitesAsString) \cup \{\text{TLS_FALLBACK_SCSV}\}, & \text{当 } signalCond \text{ 成立} \\ enabledCipherSuites \cap cipherSuitesAsString, & \text{其他情况} \end{cases}$$
 
 ## isCompatible(socket: SSLSocket)
 
