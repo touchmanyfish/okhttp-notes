@@ -7,15 +7,15 @@
 
 **[ConnectionSpec中的配置]**
 
-* $isTls$ — 客户端是否启用 TLS (Boolean)
-* $supportsTlsExtensions$ — 是否支持 TLS 扩展 (Boolean)
-* $tlsVersionsAsString$ — 客户端支持的 TLS 版本集合
-* $cipherSuitesAsString$ — 客户端支持的加密套件集合
+* *isTls* — 客户端是否启用 TLS (Boolean)
+* *supportsTlsExtensions* — 是否支持 TLS 扩展 (Boolean)
+* *tlsVersionsAsString* — 客户端支持的 TLS 版本集合
+* *cipherSuitesAsString* — 客户端支持的加密套件集合
 
 **[sslSocket中已有配置]**
 
-* $enabledProtocols$ — 约束允许的 TLS 版本集合
-* $enabledCipherSuites$ — 约束允许的加密套件集合
+* *enabledProtocols* — 约束允许的 TLS 版本集合
+* *enabledCipherSuites* — 约束允许的加密套件集合
 
 **[预定义中间变量]**
 
