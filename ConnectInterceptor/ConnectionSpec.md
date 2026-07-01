@@ -5,25 +5,39 @@
 
 ## ConnectionSpec与sslSocket中已有配置的交集
 
+**[ConnectionSpec中的配置]**
+
+
 $$\begin{aligned}
-&\mathbf{[ConnectionSpec中的配置]} \\
-&isTls \quad \text{— 客户端是否启用 TLS (Boolean)} \\
-&supportsTlsExtensions \quad \text{— 是否支持 TLS 扩展 (Boolean)} \\
-&tlsVersionsAsString \quad \text{— 客户端支持的 TLS 版本集合} \\
-&cipherSuitesAsString \quad \text{— 客户端支持的加密套件集合} \\
-\\
-&\mathbf{[sslSocket中已有配置]} \\
-&enabledProtocols \quad \text{— 约束允许的 TLS 版本集合} \\
-&enabledCipherSuites \quad \text{— 约束允许的加密套件集合} \\
-\\
-&\mathbf{[预定义中间变量]} \\
-&I = enabledProtocols \cap tlsVersionsAsString \\
-&signalCond = (isFallback = \text{true}) \land (\text{TLS\_FALLBACK\_SCSV} \in supportedCipherSuites) \\
-\\
-&\mathbf{[配置结合结果\ C]} \\
-&result\_isTls = isTls \\
-&result\_tlsVersions = I \\
-&result\_cipherSuites = \begin{cases}
+isTls &\quad \text{— 客户端是否启用 TLS (Boolean)} \\
+supportsTlsExtensions &\quad \text{— 是否支持 TLS 扩展 (Boolean)} \\
+tlsVersionsAsString &\quad \text{— 客户端支持的 TLS 版本集合} \\
+cipherSuitesAsString &\quad \text{— 客户端支持的加密套件集合}
+\end{aligned}$$
+
+**[sslSocket中已有配置]**
+
+
+$$\begin{aligned}
+enabledProtocols &\quad \text{— 约束允许的 TLS 版本集合} \\
+enabledCipherSuites &\quad \text{— 约束允许的加密套件集合}
+\end{aligned}$$
+
+**[预定义中间变量]**
+
+
+$$\begin{aligned}
+I &= enabledProtocols \cap tlsVersionsAsString \\
+signalCond &= (isFallback = \text{true}) \land (\text{TLS\_FALLBACK\_SCSV} \in supportedCipherSuites)
+\end{aligned}$$
+
+**[配置的交集]**
+
+
+$$\begin{aligned}
+result\_isTls &= isTls \\
+result\_tlsVersions &= I \\
+result\_cipherSuites &= \begin{cases}
 (enabledCipherSuites \cap cipherSuitesAsString) \cup \{\text{TLS\_FALLBACK\_SCSV}\}, & \text{当 } signalCond \text{ 成立} \\
 enabledCipherSuites \cap cipherSuitesAsString, & \text{其他情况}
 \end{cases}
@@ -31,11 +45,11 @@ enabledCipherSuites \cap cipherSuitesAsString, & \text{其他情况}
 
 ## isCompatible(socket: SSLSocket)
 
-当满足如下条件时isCompatible()返回true
+当满足如下条件时isCompatible()返回true:
 
 $$\begin{aligned}
-(tlsVersionsAsString \neq \emptyset \rightarrow tlsVersionsAsString \cap enabledProtocols \neq \emptyset) \\
-\land \; (cipherSuitesAsString \neq \emptyset \rightarrow cipherSuitesAsString \cap enabledCipherSuites \neq \emptyset)
+(tlsVersionsAsString \neq \emptyset &\rightarrow tlsVersionsAsString \cap enabledProtocols \neq \emptyset) \\
+&\land \; (cipherSuitesAsString \neq \emptyset \rightarrow cipherSuitesAsString \cap enabledCipherSuites \neq \emptyset)
 \end{aligned}$$
 
 ## 应用ConnectionSpec中的配置
@@ -46,10 +60,10 @@ ConnectionSpec如果能通过isCompatible()的检查，则可以调用apply()方
 
 对socket应用如下设置：
 
-$$\begin{gathered}
-socket.enabledProtocols = result\_tlsVersions \\
-socket.enabledCipherSuites = result\_cipherSuites
-\end{gathered}$$
+$$\begin{aligned}
+socket.enabledProtocols &= result\_tlsVersions \\
+socket.enabledCipherSuites &= result\_cipherSuites
+\end{aligned}$$
 
 ### 设置tlsExtensions
 
