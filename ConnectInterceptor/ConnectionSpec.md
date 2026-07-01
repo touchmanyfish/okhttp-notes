@@ -1,0 +1,80 @@
+# ConnectionSpec
+
+将ConnectionSpec中的配置与sslSocket原本的配置求一个 **交集**，如果这个ConnectionSpec能通过isCompatible()验证，则可以将交集中的
+**部分配置** 通过apply()方法设置给sslSocket.
+
+## ConnectionSpec与sslSocket中已有配置的交集
+
+$$\begin{aligned}
+&\mathbf{[ConnectionSpec中的配置]} \\
+&isTls \quad \text{— 客户端是否启用 TLS (Boolean)} \\
+&supportsTlsExtensions \quad \text{— 是否支持 TLS 扩展 (Boolean)} \\
+&tlsVersionsAsString \quad \text{— 客户端支持的 TLS 版本集合} \\
+&cipherSuitesAsString \quad \text{— 客户端支持的加密套件集合} \\
+\\
+&\mathbf{[sslSocket中已有配置]} \\
+&enabledProtocols \quad \text{— 约束允许的 TLS 版本集合} \\
+&enabledCipherSuites \quad \text{— 约束允许的加密套件集合} \\
+\\
+&\mathbf{[预定义中间变量]} \\
+&I = enabledProtocols \cap tlsVersionsAsString \\
+&signalCond = (isFallback = \text{true}) \land (\text{TLS\_FALLBACK\_SCSV} \in supportedCipherSuites) \\
+\\
+&\mathbf{[配置结合结果\ C]} \\
+&result\_isTls = isTls \\
+&result\_tlsVersions = I \\
+&result\_cipherSuites = \begin{cases}
+(enabledCipherSuites \cap cipherSuitesAsString) \cup \{\text{TLS\_FALLBACK\_SCSV}\}, & \text{当 } signalCond \text{ 成立} \\
+enabledCipherSuites \cap cipherSuitesAsString, & \text{其他情况}
+\end{cases}
+\end{aligned}$$
+
+## isCompatible(socket: SSLSocket)
+
+当满足如下条件时isCompatible()返回true
+
+$$\begin{aligned}
+(tlsVersionsAsString \neq \emptyset \rightarrow tlsVersionsAsString \cap enabledProtocols \neq \emptyset) \\
+\land \; (cipherSuitesAsString \neq \emptyset \rightarrow cipherSuitesAsString \cap enabledCipherSuites \neq \emptyset)
+\end{aligned}$$
+
+## 应用ConnectionSpec中的配置
+
+ConnectionSpec如果能通过isCompatible()的检查，则可以调用apply()方法将 交集中的配置 应用到sslSocket中。
+
+### 设置tlsVersion/cipherSuites
+
+对socket应用如下设置：
+
+$$\begin{gathered}
+socket.enabledProtocols = result\_tlsVersions \\
+socket.enabledCipherSuites = result\_cipherSuites
+\end{gathered}$$
+
+### 设置tlsExtensions
+
+connectionSpec.apply()方法中并不对tlsExtensions进行设置。OkHttp在apply()方法外部通过如下代码设置:
+
+```kotlin
+if (connectionSpec.supportsTlsExtensions) {
+    Platform.get().configureTlsExtensions(sslSocket, address.url.host, address.protocols)
+}
+
+```
+
+## sslSocket中的配置注意点
+
+```text
+// sslSocket中指定的协议
+sslSocket.enabledProtocols
+
+// sslSocket中指定的密码套件
+sslSocket.enabledCipherSuites
+
+// sslSocket支持的密码套件
+sslSocket.supportedCipherSuites
+
+```
+
+enabledCipherSuites是supportedCipherSuites的子集，尝试设置一个不支持的套件到enabledCipherSuites中会报错，所以apply时不用求
+result_cipherSuites与supportedCipherSuites的交集
