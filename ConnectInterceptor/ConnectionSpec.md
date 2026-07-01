@@ -27,11 +27,11 @@ $$signalCond = (isFallback = \text{true}) \land (\text{TLS\_FALLBACK\_SCSV} \in 
 **[配置的交集]**
 
 
-$$result\_isTls = isTls$$
+$$\mathit{result\_isTls} = isTls$$
 
-$$result\_tlsVersions = I$$
+$$\mathit{result\_tlsVersions} = I$$
 
-$$result\_cipherSuites = \begin{cases} (enabledCipherSuites \cap cipherSuitesAsString) \cup \{\text{TLS\_FALLBACK\_SCSV}\}, & \text{当 } signalCond \text{ 成立} \\ enabledCipherSuites \cap cipherSuitesAsString, & \text{其他情况} \end{cases}$$
+$$\mathit{result\_cipherSuites} = \begin{cases} (enabledCipherSuites \cap cipherSuitesAsString) \cup \{\text{TLS\_FALLBACK\_SCSV}\}, & \text{当 } signalCond \text{ 成立} \\ enabledCipherSuites \cap cipherSuitesAsString, & \text{其他情况} \end{cases}$$
 
 ## isCompatible(socket: SSLSocket)
 
@@ -47,9 +47,9 @@ ConnectionSpec如果能通过isCompatible()的检查，则可以调用apply()方
 
 对socket应用如下设置：
 
-$$socket.enabledProtocols = result\_tlsVersions$$
+$$socket.enabledProtocols = \mathit{result\_tlsVersions}$$
 
-$$socket.enabledCipherSuites = result\_cipherSuites$$
+$$socket.enabledCipherSuites = \mathit{result\_cipherSuites}$$
 
 ### 设置tlsExtensions
 
