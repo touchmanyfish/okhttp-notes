@@ -89,8 +89,8 @@ Trailer: trailer1, trailer2..
 
 对于这种情况，在rfc中有如下规矩：
 
-1. 接受方必须忽略“Content-Length”
-2. 如果接受方是proxy，需要删除“Content-Length”
+1. 接收方必须忽略“Content-Length”
+2. 如果接收方是proxy，需要删除“Content-Length”
 3. 接收方可以选择返回 400 Bad Request 并关闭连接
 
 ## 真实的例子
