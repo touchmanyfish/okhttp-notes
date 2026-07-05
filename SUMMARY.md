@@ -27,5 +27,6 @@
   * [ConnectionSpecSelector](ConnectInterceptor/ConnectionSpecSelector.md)
   * [HTTP Challenge-Response Authentication Architecture](<ConnectInterceptor/HTTP Challenge-Response Authentication Architecture.md>)
   * [Transfer-Encoding: chunked](ConnectInterceptor/Transfer-Encoding-chunked.md)
+  * [Content-Encoding](ConnectInterceptor/Content-Encoding.md)
   * [http协议的升级相关操作](ConnectInterceptor/http协议的升级相关操作.md)
-  * [ConnectionSpec](ConnectInterceptor/使用RealConnection#connectTunnel\(\)向代理服务器建立Tunnel.md)
+  * [使用RealConnection#connectTunnel()向代理服务器建立Tunnel](ConnectInterceptor/使用RealConnection#connectTunnel\(\)向代理服务器建立Tunnel.md)
