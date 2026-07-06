@@ -72,5 +72,29 @@ socket -> 从chunked中剥离数据(如果开启了分块传输) -> 一个或者
 Accept-Encoding: gzip, deflate, br
 ```
 
-“Accept-Encoding”用于向接收方表明自己能处理的压缩算法。发送方是否使用这些压缩算法处理发送内容是可选的。
+“Accept-Encoding”用于向接收方表明自己能处理的压缩算法,接收方收到这个Header以后:
+
+1. 可以直接无视这个header，然后发送明文(Http双方默认接受明文（identity）。除非发送方显示声明：Accept-Encoding: identity;q=0)
+2. 从这个header中选择一个或者多个编码进行使用
+
+如果发送方不使用“Accept-Encoding”，那么接收方 **只有** 如下2种选择：
+
+1. 响应中使用明文
+2. 或者415 Unsupported Media Type
+
+### 实际情况
+
+在实际情况中：
+
+* 接收方有时会使用在“Accept-Encoding”之外的编码
+* 接收方一般只在“Accept-Encoding”中选择一个编码进行使用
+
+### Accept-Encoding的缺陷
+
+只能表达“我能处理的编码”，但是不能表达“我能处理的编码顺序”
+
+
+
+
+
 
